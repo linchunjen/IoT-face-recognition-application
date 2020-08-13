@@ -1,0 +1,14 @@
+# Run MQTT service in Alpine
+# Reference https://hub.docker.com/r/trafex/alpine-mosquitto/dockerfile
+
+FROM alpine:3.9
+
+# Install packages
+RUN apk update
+RUN apk add mosquitto mosquitto-clients
+
+# Expose MQTT port
+EXPOSE 1883
+
+
+

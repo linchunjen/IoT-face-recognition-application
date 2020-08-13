@@ -1,0 +1,19 @@
+# Reference from https://github.com/MIDS-scaling-up/v2/blob/master/week03/lab/
+
+FROM ubuntu
+
+RUN apt update
+
+ENV DEBIAN_FRONTEND=noninteractive
+
+# install packages for face detection and mqtt
+RUN apt install -y curl git python3-opencv python3-pip vim-tiny mosquitto mosquitto-clients libopencv-dev
+RUN pip3 install paho-mqtt
+
+# Install opencv computer vision library 
+RUN git clone https://github.com/opencv/opencv.git
+WORKDIR /
+
+
+
+
