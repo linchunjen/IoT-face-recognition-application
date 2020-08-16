@@ -1,0 +1,35 @@
+# Create docker container for running opencv, Tensorflow, and mosquitto
+# reference w251 week05 lab, HW3
+
+FROM w251/keras:dev-tx2-4.3_b132-tf1
+
+RUN apt update 
+RUN apt install -y curl git python3-opencv python3-pip vim-tiny mosquitto mosquitto-clients libopencv-dev python3-matplotlib python3-pil
+RUN pip3 install paho-mqtt
+
+###### install the c++ version of protobuf ####
+RUN pip3 uninstall -y protobuf
+RUN pip3 install cython
+
+RUN mkdir /protobuf
+WORKDIR /protobuf
+RUN git clone -b '3.6.x' https://github.com/google/protobuf.git . && \
+    ./autogen.sh && \
+    ./configure --prefix=/usr/local 
+
+RUN make -j6 && make install
+RUN ldconfig
+
+WORKDIR /protobuf/python
+RUN python3 setup.py build --cpp_implementation
+RUN python3 setup.py install --cpp_implementation
+RUN rm -fr /protobuf
+WORKDIR /notebooks
+RUN git clone --recursive https://github.com/NVIDIA-Jetson/tf_trt_models.git
+WORKDIR tf_trt_models
+RUN ./install.sh python3
+
+# intall computer vision library
+WORKDIR /
+RUN git clone https://github.com/opencv/opencv.git
+WORKDIR / 

@@ -3,7 +3,7 @@ Build a lightweight IoT application pipeline with components running both on the
 
 ## Project Goal
 
-- Capture faces in a video stream coming from the edge in real time (Jetson TX2 with external USB webcam)
+- Capture faces using OpenCV or Tensorflow in a video stream coming from the edge in real time (Jetson TX2 with external USB webcam)
 - Publish face image through Jatson TX2 MQTT broker (Alpine)
 - Transmit them to the cloud in real time (MQTT broker and forwarder on Jetson TX2, MQTT broker on IBM cloud VM)
 - Subsribe face image through IBM cloud VM broker (Alpine)
@@ -23,6 +23,7 @@ Build a lightweight IoT application pipeline with components running both on the
 - Docker
 - OpenCV 
 - Mosquitto (Mqtt)
+- Tensorflow
 
 -----
 
@@ -161,18 +162,59 @@ s3fs cclin-HW3-images /mnt/cclin-HW3-images -o passwd_file=$HOME/.cos_creds -o s
 ## 
 ## Implementation
 
-### 1. When all containers connected correctly, the log of IBM cloud broker will show connection from TX2 forwarder and IBM cloud VM subscriber. The log is showed below.
-![IBMcloud_broker_log1](IBMcloud_broker_log1.png)
+-------------------------------------------------------
+## Part I: Face detection with Tensorflow and send images to IBM cloud object storage
 
-### 2. From IBM cloud subscriber, the log will be showed as below. 
-![IBMcloud_subscriber_log](IBMcloud_subscriber_log.png)
+### 1. IBM cloud object storage:
+- A new object storage and busket was created for HW7 (cclin-jumper-storage-cos-standard-x5t)
 
-### 3. The detected face images will be stored on object storage bucket (cclin-face-detect-cos-standard-xez). The files can be accessed with the link: http://s3.us-south.cloud-object-storage.appdomain.cloud/cclin-face-detect-cos-standard-xez/face_1.png
+### 2. Face images 
 
-- By change number in file name (face_**number**.png), the different images will be showed. 
+- Example imags: http://s3.us-south.cloud-object-storage.appdomain.cloud/cclin-jumper-storage-cos-standard-x5t/TF-face_10.png
 
-- Face detect examples:
-    - USB Camara View
-    ![Camera_view](Camera_view.png)
+![TF-face_10](http://s3.us-south.cloud-object-storage.appdomain.cloud/cclin-jumper-storage-cos-standard-x5t/TF-face_10.png)
+
+
+----------------------------------------------------
+## Part II: Comparison of OpenCV and Tensorflow-based face detection 
+
+### 1. OpenCV: 
+
+- Classified images:
+
+![CV2_results](cv2_results.png)
+
+- Identified faces
+
+![CV2_face1](5252_faceCV2.png)
+
+![CV2_face2](5353_faceCV2.png)
+
+![CV2_face3](5454_faceCV2.png)
+
+![CV2_face4](6060_faceCV2.png)
+
+![CV2_face5](6161_faceCV2.png)
+
+![CV2_face6](6262_faceCV2.png)
+
+### 2. Tensorflow: 
+
+- Classified images:
+
+![TF1_results](TF1_results.png)
+
+- Identified faces
+
+![TF1_face1](faceTF1_0.png)
+
+![TF1_face2](faceTF1_1.png)
+
+![TF1_face3](faceTF1_2.png)
+
+![TF1_face4](faceTF1_3.png)
+
+![TF1_face5](faceTF1_4.png)
+
 
 
